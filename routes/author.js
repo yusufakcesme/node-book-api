@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const mongoose = require('mongoose');
 const express = require('express');
 const { findByIdAndUpdate } = require('../models/Author');
 const router = express.Router();
@@ -8,7 +9,49 @@ const Author = require('../models/Author');
 
 // butun yazarları listele
 router.get('/', (req, res) => {
-  const promise = Author.find({});
+  const promise = Author.aggregate([
+    // yazarlara ait kitapları books veritabanından cekiyoruz
+    {
+      $lookup: {
+        from: 'books',
+        localField: '_id',
+        foreignField: 'author_id',
+        as: 'books'
+      }
+    },
+    {
+      $unwind: {
+        path: '$books',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $group: {
+        _id: {
+          _id: '$_id',
+          name: '$name',
+          surname: '$surname',
+          age: '$age',
+          bio: '$bio',
+          bookCount: '$bookCount'
+        },
+        books: {
+          $push: '$books'
+        }
+      }
+    },
+    {
+      $project: {
+        _id: '$_id._id',
+        name: '$_id.name',
+        surname: '$_id.surname',
+        age: '$_id.age',
+        bio: '$_id.bio',
+        bookCount: '$_id.bookCount',
+        books: '$books'
+      }
+    }
+  ]);
 
   promise.then((data) => {
     res.json(data);
@@ -34,7 +77,54 @@ router.post('/', (req, res, next) => {
 
 // id verilen yazarı getir
 router.get('/:author_id', (req, res) => {
-  const promise = Author.findById(req.params.author_id);
+  const promise = Author.aggregate([
+    // yazara ait kitapları books veritabanından cekiyoruz
+    {
+      $match: {
+        '_id': mongoose.Types.ObjectId(req.params.author_id)
+      }
+    },
+    {
+      $lookup: {
+        from: 'books',
+        localField: '_id',
+        foreignField: 'author_id',
+        as: 'books'
+      }
+    },
+    {
+      $unwind: {
+        path: '$books',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $group: {
+        _id: {
+          _id: '$_id',
+          name: '$name',
+          surname: '$surname',
+          age: '$age',
+          bio: '$bio',
+          bookCount: '$bookCount'
+        },
+        books: {
+          $push: '$books'
+        }
+      }
+    },
+    {
+      $project: {
+        _id: '$_id._id',
+        name: '$_id.name',
+        surname: '$_id.surname',
+        age: '$_id.age',
+        bio: '$_id.bio',
+        bookCount: '$_id.bookCount',
+        books: '$books'
+      }
+    }
+  ]);
 
   promise.then((author) => {
     if (!author) {

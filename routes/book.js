@@ -5,9 +5,23 @@ const router = express.Router();
 // Models
 const Book = require('../models/Book');
 
+
 // butun kitapları listele
 router.get('/', (req, res, next) => {
-  const promise = Book.find({});
+  const promise = Book.aggregate([
+    // yazar id'sine bakarak kitabın yazar bilgilerini de getiriyoruz
+    {
+      $lookup: {
+        from: 'authors',
+        localField: 'author_id',
+        foreignField: '_id',
+        as: 'author'
+      }
+    },
+    {
+      $unwind: '$author'
+    }
+  ]);
 
   promise.then((data) => {
     res.json(data);
@@ -21,8 +35,9 @@ router.get('/', (req, res, next) => {
 // yeni kitap kaydet
 router.post('/', (req, res, next) => {
   // posttan gelen veriler
-  const { title, author, score, category, year, createdAt, price } = req.body;
+  const { author_id, title, author, score, category, year, createdAt, price } = req.body;
   const book = new Book({
+    author_id: author_id,
     title: title,
     author: author,
     score: score,

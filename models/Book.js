@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 
 const BookSchema = new Schema({
+  author_id: Schema.Types.ObjectId, // yazar id'si alacağız
   title: {
     type: String,
     required: true
