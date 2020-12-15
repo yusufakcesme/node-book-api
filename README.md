@@ -14,3 +14,14 @@
 | /api/books/price/desc | `GET` | Empty | List book by price DESC. |
 | /api/books/price/asc | `GET` | Empty | List book by price ASC. |
 | /api/books/between/:start_year/:end_year | `GET` | Empty | Books between two dates. |
+
+
+# Authors
+
+| Route | HTTP Verb	 | POST body	 | Description	 |
+| --- | --- | --- | --- |
+| /api/authors | `GET` | Empty | List all authors. |
+| /api/authors | `POST` | {'name':'foo', 'surname':'bar', 'bio':'asd', age:10, bookCount:3 } | Create a new author. |
+| /api/authors/:author_id | `GET` | {'name':'foo', 'surname':'bar', 'bio':'asd', age:10, bookCount:3 } | Get an author. |
+| /api/authors/:author_id | `PUT` | {'name':'foo', 'surname':'bar', 'bio':'asd', age:10, bookCount:3 } | Update an author with new info. |
+| /api/authors/:author_id | `DELETE` | Empty | Delete an author. |
