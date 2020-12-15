@@ -6,6 +6,7 @@ const logger = require('morgan');
 
 const index = require('./routes/index');
 const book = require('./routes/book');
+const author = require('./routes/author');
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/api', verifyToken);
 app.use('/api/books', book);
+app.use('/api/authors', author);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
