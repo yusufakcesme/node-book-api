@@ -25,3 +25,11 @@
 | /api/authors/:author_id | `GET` | {'name':'foo', 'surname':'bar', 'bio':'asd', age:10, bookCount:3 } | Get an author. |
 | /api/authors/:author_id | `PUT` | {'name':'foo', 'surname':'bar', 'bio':'asd', age:10, bookCount:3 } | Update an author with new info. |
 | /api/authors/:author_id | `DELETE` | Empty | Delete an author. |
+
+
+# Index
+
+| Route | HTTP Verb	 | POST body	 | Description	 |
+| --- | --- | --- | --- |
+| /register | `POST` | { username: 'foo', password:'123456' } | Creates a new user. |
+| /authenticate | `POST` | { username: 'foo', password:'123456' } | Generates a token. |

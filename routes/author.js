@@ -58,6 +58,7 @@ router.get('/', (req, res) => {
   }).catch((err) => {
     res.json(err);
   });
+
 });
 
 
@@ -72,8 +73,8 @@ router.post('/', (req, res, next) => {
   }).catch((err) => {
     res.json(err);
   });
-
 });
+
 
 // id verilen yazarı getir
 router.get('/:author_id', (req, res) => {
